@@ -1,9 +1,8 @@
 package com.dd.blog.domain.user.user.service;
 
-import com.dd.blog.domain.user.user.dto.LoginRequestDto;
-import com.dd.blog.domain.user.user.dto.SignUpRequestDto;
-import com.dd.blog.domain.user.user.dto.TokenResponseDto;
-import com.dd.blog.domain.user.user.dto.UserResponseDto;
+import com.dd.blog.domain.post.post.repository.PostRepository;
+import com.dd.blog.domain.user.follow.repository.FollowRepository;
+import com.dd.blog.domain.user.user.dto.*;
 import com.dd.blog.domain.user.user.entity.User;
 import com.dd.blog.domain.user.user.entity.UserRole;
 import com.dd.blog.domain.user.user.repository.UserRepository;
@@ -25,6 +24,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
+    private final FollowRepository followRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthTokenService authTokenService;
 
@@ -167,34 +168,6 @@ public class UserService {
         return userRepository.findByRefreshToken(refreshToken);
     }
 
-    //계정 탈퇴
-    @Transactional
-    public void deleteUser(Long userId){
-        //정말 탈퇴하시겠습니까? 한번 되묻는 과정이 필요할 듯 하다. -> 프론트에서 구현
-        //깃허브에서는 레포지토리를 삭제할 때 깃허브 계정 비밀번호를 입력해야 삭제할 수 있던데 -> 시간이 남는다면 개발해보기
-
-//        //탈퇴한 사용자가 작성한 글과 댓글을 "탈퇴한 사용자" 라고 보이게 하기위해 탈퇴 전 닉네임 변경
-//        userRepository.findById(userId).ifPresent(user -> user.setNickname("탈퇴한 사용자"));
-
-        userRepository.deleteById(userId);
-    }
-
-    //비밀번호 변경
-
-
-    //잔여 포인트 확인
-    @Transactional(readOnly = true)
-    public int remainingPoint(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
-
-        UserResponseDto dto = UserResponseDto.fromEntity(user);
-        return dto.getRemainingPoint();
-    }
-
-    //프로필정보 수정 - 프로필 상세조회 탭에 들어가면 수정가능-수정완료 버튼을 누르면 새롭게 들어온 UserResponseDTO를 가지고 update
-    //
-
     /**
      * 토큰 갱신
      */
@@ -252,4 +225,56 @@ public class UserService {
     public String genAccessToken(User user) {
         return authTokenService.genAccessToken(user);
     }
+
+    //사용자 프로필 조회(위의 findById랑 다름)
+    @Transactional(readOnly = true)
+    public UserProfileDto getUserProfile(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
+
+        int postCount = postRepository.countByAuthor(user);
+        int followerCount = followRepository.countByFollowee(user);
+        int followingCount = followRepository.countByFollower(user);
+
+        return UserResponseDto.fromEntity(user, postCount, followerCount, followingCount);
+    }
+
+
+    //계정 탈퇴
+    @Transactional
+    public void deleteUser(Long userId){
+        //정말 탈퇴하시겠습니까? 한번 되묻는 과정이 필요할 듯 하다. -> 프론트에서 구현
+        //깃허브에서는 레포지토리를 삭제할 때 깃허브 계정 비밀번호를 입력해야 삭제할 수 있던데 -> 시간이 남는다면 개발해보기
+
+//        //탈퇴한 사용자가 작성한 글과 댓글을 "탈퇴한 사용자" 라고 보이게 하기위해 탈퇴 전 닉네임 변경
+//        userRepository.findById(userId).ifPresent(user -> user.setNickname("탈퇴한 사용자"));
+
+        userRepository.deleteById(userId);
+    }
+
+    //비밀번호 변경
+    @Transactional
+    public void updatePassword(Long userId, String newPassword){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        user.updatePassword(encodedPassword);
+        userRepository.save(user);
+    }
+
+    //잔여 포인트 확인
+    @Transactional(readOnly = true)
+    public int remainingPoint(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+
+        UserResponseDto dto = UserResponseDto.fromEntity(user);
+        return dto.getRemainingPoint();
+    }
+
+    //프로필정보 수정 - 프로필 상세조회 탭에 들어가면 수정가능-수정완료 버튼을 누르면 새롭게 들어온 UserResponseDTO를 가지고 update
+    //
+
+
 }

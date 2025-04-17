@@ -80,6 +80,8 @@ public class User extends BaseEntity {
         return UserRole.ROLE_ADMIN.equals(this.role);
     }
 
+    public void updatePassword(String newPassword) {  this.password = newPassword;  }
+
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 

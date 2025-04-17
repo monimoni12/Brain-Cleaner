@@ -1,9 +1,6 @@
 package com.dd.blog.domain.user.user.controller;
 
-import com.dd.blog.domain.user.user.dto.LoginRequestDto;
-import com.dd.blog.domain.user.user.dto.SignUpRequestDto;
-import com.dd.blog.domain.user.user.dto.TokenResponseDto;
-import com.dd.blog.domain.user.user.dto.UserResponseDto;
+import com.dd.blog.domain.user.user.dto.*;
 import com.dd.blog.domain.user.user.entity.User;
 import com.dd.blog.domain.user.user.service.UserService;
 import com.dd.blog.global.rq.Rq;
@@ -12,6 +9,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -67,7 +65,7 @@ public class ApiV1UserController {
 
     @GetMapping("/{userId}")
     @Operation(summary = "사용자 정보 조회", description = "특정 사용자의 정보를 조회합니다.")
-    public ResponseEntity<UserResponseDto> getUserProfile(@PathVariable Long userId) {
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long userId) {
         User user = userService.getUserById(userId);
         return ResponseEntity.ok(UserResponseDto.fromEntity(user));
     }
@@ -107,16 +105,26 @@ public class ApiV1UserController {
         return ResponseEntity.ok(UserResponseDto.fromEntity(fullUser));
     }
 
+    @GetMapping("/{userId}")
+    @Operation(summary = "사용자 프로필 조회", description = "프로필 페이지에서 해당 사용자의 정보를 조회합니다.")
+    public ResponseEntity<UserProfileDto> getUserProfile(@PathVariable Long userId){
+        UserProfileDto user = userService.getUserProfile(userId);
+        return ResponseEntity.ok(user);
+    }
+
     @DeleteMapping("/{userId}")
     @Operation(summary = "계정 삭제", description = "프로필의 계정삭제 버튼을 누르면 사용자 정보를 삭제합니다.")
     public ResponseEntity<String> deleteUser(@PathVariable Long userId){
         userService.deleteUser(userId);
         return ResponseEntity.ok("탈퇴완료");
     }
-//
-//    @PutMapping("/{userId}")
-//    @Operation()
-//    public ResponseEntity<>
+
+    @PutMapping("/{userId}/updatePassword")
+    @Operation(summary = "비밀번호 변경", description = "프로필의 비밀번호 변경 버튼을 누르면 새로운 비밀번호를 입력받아 저장합니다.")
+    public ResponseEntity<String> updatePassword(@PathVariable Long userId, @Valid @RequestBody PasswordUpdateRequestDto request){
+        userService.updatePassword(userId, request.getNewPassword());
+        return ResponseEntity.ok("비밀번호가 변경되었습니다.");
+    }
 
     @PostMapping("/refresh")
     @Operation(summary = "토큰 갱신", description = "리프레시 토큰으로 새로운 액세스 토큰을 발급받습니다.")
