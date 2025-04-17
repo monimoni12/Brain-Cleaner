@@ -1,6 +1,8 @@
 package com.dd.blog.domain.user.user.service;
 
+import com.dd.blog.domain.post.post.entity.Post;
 import com.dd.blog.domain.post.post.repository.PostRepository;
+import com.dd.blog.domain.user.follow.entity.Follow;
 import com.dd.blog.domain.user.follow.repository.FollowRepository;
 import com.dd.blog.domain.user.user.dto.*;
 import com.dd.blog.domain.user.user.entity.User;
@@ -15,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -232,11 +235,14 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 
-        int postCount = postRepository.countByAuthor(user);
-        int followerCount = followRepository.countByFollowee(user);
-        int followingCount = followRepository.countByFollower(user);
+        List<Post> posts = postRepository.findByUserId(userId);
+        List<Follow> followers = followRepository.findByFollower(user);
+        List<Follow> followings = followRepository.findByFollowing(user);
+        int postCount = posts.size();
+        int followerCount = followers.size();
+        int followingCount = followings.size();
 
-        return UserResponseDto.fromEntity(user, postCount, followerCount, followingCount);
+        return UserProfileDto.fromEntity(user, postCount, followerCount, followingCount);
     }
 
 
