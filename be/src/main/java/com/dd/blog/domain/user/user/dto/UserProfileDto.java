@@ -21,7 +21,6 @@ public class UserProfileDto {
     private int totalPoint;
     private UserRole role;
     private LocalDateTime createdAt;
-    private boolean isSocialUser;
 
     private int postCount;       // 작성한 게시글 수
     private int followerCount;   // 팔로워 수
