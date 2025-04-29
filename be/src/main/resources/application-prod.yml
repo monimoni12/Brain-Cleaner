@@ -29,3 +29,5 @@ custom:
     cookieDomain: '${custom.prod.cookieDomain}'
     frontUrl: '${custom.prod.frontUrl}'
     backUrl: '${custom.prod.backUrl}'
+  genFile:
+    dirPath: /gen
