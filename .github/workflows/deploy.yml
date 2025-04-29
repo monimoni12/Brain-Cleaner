@@ -8,7 +8,7 @@ on:
       - "be/settings.gradle.kts"
       - "be/Dockerfile"
     branches:
-      - main
+      - dev
 jobs:
   makeTagAndRelease:
     runs-on: ubuntu-latest
@@ -38,7 +38,7 @@ jobs:
     needs: makeTagAndRelease
     runs-on: ubuntu-latest
     env:
-      DOCKER_IMAGE_NAME: Brain-Cleaner ###프로젝트 이미지 네임###
+      DOCKER_IMAGE_NAME: brain-cleaner ###프로젝트 이미지 네임###
     outputs:
       DOCKER_IMAGE_NAME: ${{ env.DOCKER_IMAGE_NAME }}
       OWNER_LC: ${{ env.OWNER_LC }}
@@ -87,7 +87,7 @@ jobs:
       - name: 인스턴스 ID 가져오기
         id: get_instance_id
         run: |
-          INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=dev-ec2-1" "Name=instance-state-name,Values=running" --query "Reservations[].Instances[].InstanceId" --output text)
+          INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=dev-blog-ec2" "Name=instance-state-name,Values=running" --query "Reservations[].Instances[].InstanceId" --output text)
           echo "INSTANCE_ID=$INSTANCE_ID" >> $GITHUB_ENV
           echo $INSTANCE_ID
       - name: AWS SSM Send-Command
