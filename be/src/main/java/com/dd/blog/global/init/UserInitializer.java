@@ -33,7 +33,7 @@ public class UserInitializer implements CommandLineRunner {
                 createUser("raz99@gmail.com", defaultPassword, "뚱이", UserRole.ROLE_USER_TRAINEE, 0, 150, "오늘부터 SNS 끊습니다"),
                 createUser("tlgus3@gmail.com", defaultPassword, "오리", UserRole.ROLE_USER_EXPLORER, 400, 850, "아침형 인간"),
                 createUser("deus7861@gmail.com", defaultPassword, "땃쥐", UserRole.ROLE_USER_CONSCIOUS, 1500, 2500, "틱톡은 하루 1시간만"),
-                createUser("jennlee@gmail.com", defaultPassword, "Jenn", UserRole.ROLE_USER_DESTROYER, 2500, 5000, "디지털 미니멀리스트"),
+                createUser("jennlee@gmail.com", defaultPassword, "제인", UserRole.ROLE_USER_DESTROYER, 2500, 5000, "디지털 미니멀리스트"),
                 createUser("qwerty121@naver.com", defaultPassword, "모카", UserRole.ROLE_USER_CLEANER, 4000, 8000, "8개월째 디톡스 중입니다"),
                 createUser("pinn34@naver.com", defaultPassword, "핀", UserRole.ROLE_USER_TRAINEE, 150, 250, "..."),
                 createUser("dlwodn@naver.com", defaultPassword, "나무늘보", UserRole.ROLE_USER_EXPLORER, 400, 700, "하루 1시간 독서하기"),
@@ -62,7 +62,7 @@ public class UserInitializer implements CommandLineRunner {
                 .refreshToken(null)
                 .statusMessage(statusMessage)
                 .birthDate(getRandomBirthDate())
-                .streakDays((int) (Math.random() * 100)) // 0-99일 사이의 랜덤 연속 인증일
+                .streakDays(0)
                 .build();
     }
 
