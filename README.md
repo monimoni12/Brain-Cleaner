@@ -213,20 +213,23 @@ be/
  
  ## 명명 규칙
 💻 Java 쪽 컨벤션
-항목	표기법	예시	설명
-클래스명	PascalCase	PostCategory, UserController	파일 이름 = 클래스 이름
-변수명/필드명	camelCase	createdAt, userId	첫 글자 소문자
-메서드명	camelCase	getUserName(), createPost()	동사 중심
-패키지명	lowercase + 점(.)	com.example.post.entity	전부 소문자
-제네릭 타입	PascalCase	List<Post>	클래스명 기준
-enum 상수	UPPER_SNAKE_CASE	PENDING, APPROVED_REJECTED	고정된 상수 이름
+| 항목      | 표기법                | 예시                               | 설명             |
+| ------- | ------------------ | -------------------------------- | -------------- |
+| 클래스명    | PascalCase         | `PostCategory`, `UserController` | 파일 이름 = 클래스 이름 |
+| 변수명/필드명 | camelCase          | `createdAt`, `userId`            | 첫 글자 소문자       |
+| 메서드명    | camelCase          | `getUserName()`, `createPost()`  | 동사 중심          |
+| 패키지명    | lowercase + 점(.)   | `com.example.post.entity`        | 전부 소문자         |
+| 제네릭 타입  | PascalCase         | `List<Post>`                     | 클래스명 기준        |
+| enum 상수 | UPPER\_SNAKE\_CASE | `PENDING`, `APPROVED_REJECTED`   | 고정된 상수 이름      |
+
 
 🗄️ DB (JPA 매핑 관련) 컨벤션
-항목	표기법	예시	설명
-테이블명	snake_case	"post_category"	DB 테이블명에 맞춰 작성
-컬럼명	snake_case	"created_at", "user_id"	DB 컬럼명에 맞춰 작성
-시퀀스명/제약조건명	snake_case	post_id_seq, fk_user_id	대부분 snake_case 사용
-기본키	snake_case	post_id, user_id	보통 테이블명 + _id
+| 항목         | 표기법         | 예시                          | 설명                 |
+| ---------- | ----------- | --------------------------- | ------------------ |
+| 테이블명       | snake\_case | `"post_category"`           | DB 테이블명에 맞춰 작성     |
+| 컬럼명        | snake\_case | `"created_at"`, `"user_id"` | DB 컬럼명에 맞춰 작성      |
+| 시퀀스명/제약조건명 | snake\_case | `post_id_seq`, `fk_user_id` | 대부분 snake\_case 사용 |
+| 기본키        | snake\_case | `post_id`, `user_id`        | 보통 테이블명 + `_id`    |
 
  <br/>
  
