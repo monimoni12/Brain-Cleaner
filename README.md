@@ -1,4 +1,4 @@
-<a href="https://club-project-one.vercel.app/" target="_blank">
+<a href="https://www.braincleaner.site/" target="_blank">
  <img src="https://github.com/user-attachments/assets/d8eab06f-d8da-42f8-87fd-711dd0366353" alt="배너" width="100%"/>
  </a>
 
@@ -253,56 +253,24 @@ fe/ (Frontend - Next.js / TypeScript)
  
  ## 명명 규칙
 💻 Java 쪽 컨벤션
-항목
-표기법
-예시
-설명
-클래스명
-PascalCase (대문자로 시작하는 카멜)
-PostCategory, UserController
-파일 이름 = 클래스 이름
-변수명 / 필드명
-camelCase
-createdAt, userId
-첫 글자 소문자
-메서드명
-camelCase
-getUserName(), createPost()
-동사 중심
-패키지명
-lowercase + 점(.)
-com.example.post.entity
-전부 소문자
-제네릭 타입
-PascalCase
-List<Post>
-클래스명 기준
-enum 상수
-UPPER_SNAKE_CASE
-PENDING, APPROVED_REJECTED
-고정된 상수 이름
+| 항목      | 표기법                | 예시                               | 설명             |
+| ------- | ------------------ | -------------------------------- | -------------- |
+| 클래스명    | PascalCase         | `PostCategory`, `UserController` | 파일 이름 = 클래스 이름 |
+| 변수명/필드명 | camelCase          | `createdAt`, `userId`            | 첫 글자 소문자       |
+| 메서드명    | camelCase          | `getUserName()`, `createPost()`  | 동사 중심          |
+| 패키지명    | lowercase + 점(.)   | `com.example.post.entity`        | 전부 소문자         |
+| 제네릭 타입  | PascalCase         | `List<Post>`                     | 클래스명 기준        |
+| enum 상수 | UPPER\_SNAKE\_CASE | `PENDING`, `APPROVED_REJECTED`   | 고정된 상수 이름      |
+
 
 🗄️ DB (JPA 매핑 관련) 컨벤션
-항목
-표기법
-예시
-설명
-테이블명 (@Table(name=))
-snake_case
-"post_category"
-DB 테이블명에 맞춰 작성
-컬럼명 (@Column(name=))
-snake_case
-"created_at", "user_id"
-DB 컬럼명에 맞춰 작성
-시퀀스명 / 제약조건명
-snake_case
-post_id_seq, fk_user_id
-DB 스키마 용어들 대부분 snake_case
-기본키
-snake_case
-post_id, user_id
-보통 테이블명 + _id
+| 항목         | 표기법         | 예시                          | 설명                 |
+| ---------- | ----------- | --------------------------- | ------------------ |
+| 테이블명       | snake\_case | `"post_category"`           | DB 테이블명에 맞춰 작성     |
+| 컬럼명        | snake\_case | `"created_at"`, `"user_id"` | DB 컬럼명에 맞춰 작성      |
+| 시퀀스명/제약조건명 | snake\_case | `post_id_seq`, `fk_user_id` | 대부분 snake\_case 사용 |
+| 기본키        | snake\_case | `post_id`, `user_id`        | 보통 테이블명 + `_id`    |
+
 
 
  
@@ -310,24 +278,16 @@ post_id, user_id
  
 
 ## 이슈 네이밍
-태그
-의미
-FEAT
-새로운 기능 추가
-FIX
-버그 수정
-REFACTOR
-리팩토링 (기능 변경 없이 코드 개선)
-DOCS
-문서 수정
-STYLE
-코드 포맷팅, 세미콜론 누락 등 의미 없는 변경
-TEST
-테스트 코드 관련
-CHORE
-빌드 설정, 패키지 설치 등 잡일성 작업
-CI / BUILD
-CI/CD 관련 설정 작업
+| 태그           | 의미                         |
+| ------------ | -------------------------- |
+| `FEAT`       | 새로운 기능 추가                  |
+| `FIX`        | 버그 수정                      |
+| `REFACTOR`   | 리팩토링 (기능 변경 없이 코드 개선)      |
+| `DOCS`       | 문서 수정                      |
+| `STYLE`      | 코드 포맷팅, 세미콜론 누락 등 의미 없는 변경 |
+| `TEST`       | 테스트 코드 관련                  |
+| `CHORE`      | 빌드 설정, 패키지 설치 등 잡일성 작업     |
+| `CI / BUILD` | CI/CD 관련 설정 작업             |
 
  
  <br/>
