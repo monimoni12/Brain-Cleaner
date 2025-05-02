@@ -212,35 +212,61 @@ be/
  
  
  ## 명명 규칙
- * 상수 : 영문 대문자 + 스네이크 케이스
- ```
- const NAME_ROLE;
- ```
- * 변수 & 함수 : 카멜케이스
- ```
- // state
- const [isLoading, setIsLoading] = useState(false);
- const [isLoggedIn, setIsLoggedIn] = useState(false);
- const [errorMessage, setErrorMessage] = useState('');
- const [currentUser, setCurrentUser] = useState(null);
+💻 Java 쪽 컨벤션
+항목
+표기법
+예시
+설명
+클래스명
+PascalCase (대문자로 시작하는 카멜)
+PostCategory, UserController
+파일 이름 = 클래스 이름
+변수명 / 필드명
+camelCase
+createdAt, userId
+첫 글자 소문자
+메서드명
+camelCase
+getUserName(), createPost()
+동사 중심
+패키지명
+lowercase + 점(.)
+com.example.post.entity
+전부 소문자
+제네릭 타입
+PascalCase
+List<Post>
+클래스명 기준
+enum 상수
+UPPER_SNAKE_CASE
+PENDING, APPROVED_REJECTED
+고정된 상수 이름
+
+🗄️ DB (JPA 매핑 관련) 컨벤션
+항목
+표기법
+예시
+설명
+테이블명 (@Table(name=))
+snake_case
+"post_category"
+DB 테이블명에 맞춰 작성
+컬럼명 (@Column(name=))
+snake_case
+"created_at", "user_id"
+DB 컬럼명에 맞춰 작성
+시퀀스명 / 제약조건명
+snake_case
+post_id_seq, fk_user_id
+DB 스키마 용어들 대부분 snake_case
+기본키
+snake_case
+post_id, user_id
+보통 테이블명 + _id
+
+
  
- // 배열 - 복수형 이름 사용
- const datas = [];
- 
- // 정규표현식: 'r'로 시작
- const = rName = /.*/;
- 
- // 이벤트 핸들러: 'on'으로 시작
- const onClick = () => {};
- const onChange = () => {};
- 
- // 반환 값이 불린인 경우: 'is'로 시작
- const isLoading = false;
- 
- // Fetch함수: method(get, post, put, del)로 시작
- const getEnginList = () => {...}
- ```
- 
+
  <br/>
  
  ## 블록 구문
