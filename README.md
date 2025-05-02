@@ -1,5 +1,5 @@
 <a href="https://www.braincleaner.site" target="_blank">
- <img src="https://github.com/user-attachments/assets/af96bc8e-fe62-4668-8260-c4ad77daa68a" alt="배너" width="100%"/>
+ <img src="https://github.com/user-attachments/assets/612e4564-b4fd-4786-a64e-a019d4f642d6"" alt="배너" width="100%"/>
  </a>
  
  <br/>
