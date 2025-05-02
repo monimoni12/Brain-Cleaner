@@ -111,7 +111,7 @@
  <br/>
  
  ## 5.2 Frontend
-[![Next.js](https://img.shields.io/badge/Next.js-white?style=flat&logo=next.js)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/NextJs-000000?style=flat&logo=next.js&logoColor=white)](https://nextjs.org/)
  <br/>
  
  ## 5.3 Backend
