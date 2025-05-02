@@ -1,5 +1,5 @@
-<a href="https://www.braincleaner.site" target="_blank">
- <img src="https://github.com/user-attachments/assets/612e4564-b4fd-4786-a64e-a019d4f642d6"" alt="배너" width="100%"/>
+<a href="https://club-project-one.vercel.app/" target="_blank">
+ <img src="https://github.com/user-attachments/assets/daa622b9-7c69-4786-8db3-4996b7f140be" alt="배너" width="100%"/>
  </a>
  
  <br/>
@@ -95,8 +95,9 @@
  |  |  |  |
  |-----------------|-----------------|-----------------|
  | 유재현   |  <img src=" " width="100"> | <ul><li>회원 인증</li><li>일반 / 소셜 로그인, 토큰 관리 </li><li>메인 페이지 일부 구성요소</li></ul>     |
- | 이서영   |  <img src=" " width="100"> | <ul><li>메인 페이지 일부 구성요소</li><li>팔로우기능 개발</li><li>댓글 기능 개발</li></ul> |
- | 이은서   |  <img src=" " width="100">    |<ul><li>게시판 CRUD</li><li>카테고리별 목록 조회 및 검색 기능</li><li>포인트 상점 기능</li><li>댓글 기능 일부 및 좋아요 기능 </li><li>BrainCleaner🧠의 시그니처 디자인!✌🏻 </li></ul>  |
+ | 이서영   |  <img src=” 
+">| <ul><li>메인 페이지 일부 구성요소</li><li>팔로우기능 개발</li><li>댓글 기능 개발</li></ul> |
+ | 이은서   |  <img src=" " width="100">    |<ul><li>BrainCleaner🧠의 시그니처 디자인!✌🏻 </li><li>게시판 CRUD</li><li>카테고리별 목록 조회 및 검색 기능</li><li>포인트 상점 기능</li><li>댓글 기능 일부 및 좋아요 기능 </li></ul>  |
  | 최정인    |  <img src=" " width="100">    | <ul><li>관리자 관리 기능</li><li>포인트 자동 적립  / 등업 기능</li></ul>    |
  
  <br/>
@@ -154,7 +155,7 @@ be/
 │       │   │   │   ├── point/      # 포인트 연산 기능
 │       │   │   │   └── pointstore/ # 포인트 상점 기능
 │       │   │   ├── post/           # 게시글 관련 기능
-│       │   │   │   ├── category/   # 게시글 카테고리 
+│       │   │   │   ├── category/   # 게시글 카테고리
 │       │   │   │   ├── comment/    # 댓글 기능
 │       │   │   │   ├── post/       # 게시글 기능
 │       │   │   │   ├── postlike/   # 좋아요 기능
@@ -169,35 +170,74 @@ be/
 │       │       ├── config/         # 설정 클래스
 │       │       ├── exception/      # 예외 처리
 │       │       ├── init/           # 초기화 도구
-│       │       ├── jpa/            # JPA 설정
+│       │       ├── jpa/           # 엔티티 기본 설정 (id, createdAt, updatedAt)
 │       │       ├── json/           # JSON 유틸리티
 │       │       ├── rq/             # 요청/응답 추상화
 │       │       ├── security/       # 보안 설정
-│       │       └── utils/          # 도구
+│       │       └── utils/          # 유틸리티
 │       └── resources/
 │           ├── application.yml     # 메인 애플리케이션 속성
 │           ├── application-dev.yml  # 개발 환경 속성
-│           ├── application-prod.yml # 프로덕션 환경 속성
+│           ├── application-prod.yml # 배포 환경 속성
 │           └── application-test.yml # 테스트 환경 속성
 └── gradle/
     └── wrapper/                    # Gradle 래퍼 파일
  ```
- 
  <br/>
+
+## 6.2 Frontend
+```plaintext
+fe/ (Frontend - Next.js / TypeScript)
+├── .next/                # Next.js 빌드/캐시 (Git 무시)
+├── node_modules/         # 의존성 라이브러리 (Git 무시)
+├── public/               # 정적 에셋 (이미지, 폰트 등)
+├── src/                  # 소스 코드 루트
+│   ├── app/              # Next.js App Router (라우팅, 페이지)
+│   ├── components/       # 공통 UI 컴포넌트
+│   ├── constants/        # 공통 상수
+│   ├── contexts/         # React Context
+│   ├── font/             # 폰트 설정/파일
+│   ├── lib/              # 로직/라이브러리 (API 연동 등)
+│   ├── types/            # TypeScript 타입 정의
+│   └── utils/            # 유틸리티 함수
+├── .env                  # 환경 변수 (기본)
+├── .env.development      # 개발 환경 변수
+├── .env.production       # 배포 환경 변수
+├── .gitattributes        # Git 속성 설정
+├── .gitignore            # Git 무시 목록
+├── eslint.config.mjs     # ESLint 설정
+├── next.config.js        # Next.js 설정
+├── next-env.d.ts         # Next.js 환경 타입
+├── package-lock.json     # 의존성 버전 고정
+├── package.json          # 프로젝트 정보/의존성
+├── postcss.config.js     # PostCSS 설정
+├── README.MD             # 프로젝트 설명
+├── tailwind.config.js    # Tailwind CSS 설정
+└── tsconfig.json         # TypeScript 설정
+
+
+```
  <br/>
  
  # 7. Development Workflow (개발 워크플로우)
  ## 브랜치 전략 (Branch Strategy)
  우리의 브랜치 전략은 Git Flow를 기반으로 하며, 다음과 같은 브랜치를 사용합니다.
  
- - Dev Branch
+ - dev Branch
    - 배포 가능한 상태의 코드를 유지합니다.
    - 모든 배포는 이 브랜치에서 이루어집니다.
  
- - {name} Branch
-   - 팀원 각자의 개발 브랜치입니다.
+ - feature/#{number} Branch
+   - feature 개발 브랜치입니다.
    - 모든 기능 개발은 이 브랜치에서 이루어집니다.
- 
+
+ - refactor/#{number} Branch
+   - 리팩토링 브랜치입니다.
+   - 구조 및 기타 개선사항 반영은 이 브랜치에서 이루어집니다.
+
+ - fix/#{number} Branch
+   - 버그 수정 브랜치입니다.
+   - bugfix는 이 브랜치에서 이루어집니다. 
  <br/>
  <br/>
  
@@ -213,93 +253,89 @@ be/
  
  ## 명명 규칙
 💻 Java 쪽 컨벤션
-| 항목      | 표기법                | 예시                               | 설명             |
-| ------- | ------------------ | -------------------------------- | -------------- |
-| 클래스명    | PascalCase         | `PostCategory`, `UserController` | 파일 이름 = 클래스 이름 |
-| 변수명/필드명 | camelCase          | `createdAt`, `userId`            | 첫 글자 소문자       |
-| 메서드명    | camelCase          | `getUserName()`, `createPost()`  | 동사 중심          |
-| 패키지명    | lowercase + 점(.)   | `com.example.post.entity`        | 전부 소문자         |
-| 제네릭 타입  | PascalCase         | `List<Post>`                     | 클래스명 기준        |
-| enum 상수 | UPPER\_SNAKE\_CASE | `PENDING`, `APPROVED_REJECTED`   | 고정된 상수 이름      |
-
+항목
+표기법
+예시
+설명
+클래스명
+PascalCase (대문자로 시작하는 카멜)
+PostCategory, UserController
+파일 이름 = 클래스 이름
+변수명 / 필드명
+camelCase
+createdAt, userId
+첫 글자 소문자
+메서드명
+camelCase
+getUserName(), createPost()
+동사 중심
+패키지명
+lowercase + 점(.)
+com.example.post.entity
+전부 소문자
+제네릭 타입
+PascalCase
+List<Post>
+클래스명 기준
+enum 상수
+UPPER_SNAKE_CASE
+PENDING, APPROVED_REJECTED
+고정된 상수 이름
 
 🗄️ DB (JPA 매핑 관련) 컨벤션
-| 항목         | 표기법         | 예시                          | 설명                 |
-| ---------- | ----------- | --------------------------- | ------------------ |
-| 테이블명       | snake\_case | `"post_category"`           | DB 테이블명에 맞춰 작성     |
-| 컬럼명        | snake\_case | `"created_at"`, `"user_id"` | DB 컬럼명에 맞춰 작성      |
-| 시퀀스명/제약조건명 | snake\_case | `post_id_seq`, `fk_user_id` | 대부분 snake\_case 사용 |
-| 기본키        | snake\_case | `post_id`, `user_id`        | 보통 테이블명 + `_id`    |
+항목
+표기법
+예시
+설명
+테이블명 (@Table(name=))
+snake_case
+"post_category"
+DB 테이블명에 맞춰 작성
+컬럼명 (@Column(name=))
+snake_case
+"created_at", "user_id"
+DB 컬럼명에 맞춰 작성
+시퀀스명 / 제약조건명
+snake_case
+post_id_seq, fk_user_id
+DB 스키마 용어들 대부분 snake_case
+기본키
+snake_case
+post_id, user_id
+보통 테이블명 + _id
 
- <br/>
- 
- ## 블록 구문
- ```
- // 한 줄짜리 블록일 경우라도 {}를 생략하지 않고, 명확히 줄 바꿈 하여 사용한다
- // good
- if(true){
-   return 'hello'
- }
- 
- // bad
- if(true) return 'hello'
- ```
+
  
  <br/>
  
- ## 함수
- ```
- 함수는 함수 표현식을 사용하며, 화살표 함수를 사용한다.
- // Good
- const fnName = () => {};
- 
- // Bad
- function fnName() {};
- ```
- 
- <br/>
- 
- ## 태그 네이밍
- Styled-component태그 생성 시 아래 네이밍 규칙을 준수하여 의미 전달을 명확하게 한다.<br/>
- 태그명이 길어지더라도 의미 전달의 명확성에 목적을 두어 작성한다.<br/>
- 전체 영역: Container<br/>
- 영역의 묶음: {Name}Area<br/>
- 의미없는 태그: <><br/>
- ```
- <Container>
-   <ContentsArea>
-     <Contents>...</Contents>
-     <Contents>...</Contents>
-   </ContentsArea>
- </Container>
- ```
+
+## 이슈 네이밍
+태그
+의미
+FEAT
+새로운 기능 추가
+FIX
+버그 수정
+REFACTOR
+리팩토링 (기능 변경 없이 코드 개선)
+DOCS
+문서 수정
+STYLE
+코드 포맷팅, 세미콜론 누락 등 의미 없는 변경
+TEST
+테스트 코드 관련
+CHORE
+빌드 설정, 패키지 설치 등 잡일성 작업
+CI / BUILD
+CI/CD 관련 설정 작업
+
  
  <br/>
- 
- ## 폴더 네이밍
- 카멜 케이스를 기본으로 하며, 컴포넌트 폴더일 경우에만 파스칼 케이스로 사용한다.
- ```
- // 카멜 케이스
- camelCase
- // 파스칼 케이스
- PascalCase
- ```
- 
- <br/>
- 
- ## 파일 네이밍
- ```
- 컴포넌트일 경우만 .jsx 확장자를 사용한다. (그 외에는 .js)
- customHook을 사용하는 경우 : use + 함수명
- ```
- 
- <br/>
- <br/>
- 
+  
  # 9. 커밋 컨벤션
  ## 기본 구조
  ```
- type : subject
+ type/#issue number
  
  body 
  ```
@@ -314,53 +350,8 @@ be/
 
  ```
  
+ <br/> 
  <br/>
- 
- ## 커밋 이모지
- ```
- == 코드 관련
- 📝	코드 작성
- 🔥	코드 제거
- 🔨	코드 리팩토링
- 💄	UI / style 변경
- 
- == 문서&파일
- 📰	새 파일 생성
- 🔥	파일 제거
- 📚	문서 작성
- 
- == 버그
- 🐛	버그 리포트
- 🚑	버그를 고칠 때
- 
- == 기타
- 🐎	성능 향상
- ✨	새로운 기능 구현
- 💡	새로운 아이디어
- 🚀	배포
- ```
- 
- <br/>
- 
- ## 커밋 예시
- ```
- == ex1
- ✨Feat: "회원 가입 기능 구현"
- 
- SMS, 이메일 중복확인 API 개발
- 
- == ex2
- 📚chore: styled-components 라이브러리 설치
- 
- UI개발을 위한 라이브러리 styled-components 설치
- ```
- 
- <br/>
- <br/>
- 
- # 10. 컨벤션 수행 결과
- <img width="100%" alt="코드 컨벤션" src="https://github.com/user-attachments/assets/0dc218c0-369f-45d2-8c6d-cdedc81169b4">
- <img width="100%" alt="깃플로우" src="https://github.com/user-attachments/assets/2a4d1332-acc2-4292-9815-d122f5aea77c">
-
+ <
 
 
