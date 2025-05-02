@@ -32,7 +32,7 @@
  # 2. Team Members (팀원 및 팀 소개)
  | 유재현 | 이서영 | 이은서 | 최정인 |
  |:------:|:------:|:------:|:------:|
- | <img src="https://github.com/user-attachments/assets/365c72d7-2939-40c3-926a-59c86da3e39b" alt="유재현" width="150"> | <img src="https://github.com/user-attachments/assets/78ec4937-81bb-4637-975d-631eb3c4601e" alt="이서영" width="150"> | <img src="https://github.com/user-attachments/assets/78ce1062-80a0-4edb-bf6b-5efac9dd992e" alt="이은서" width="150"> | <img src="https://github.com/user-attachments/assets/beea8c64-19de-4d91-955f-ed24b813a638" alt="최정인" width="150"> |
+ | <img src="https://github.com/user-attachments/assets/365c72d7-2939-40c3-926a-59c86da3e39b" alt="유재현" width="150"> | <img src="[https://github.com/user-attachments/assets/78ec4937-81bb-4637-975d-631eb3c4601e](https://github.com/user-attachments/assets/eb93e3ee-4b64-41e4-9672-745062936efd)" alt="이서영" width="150"> | <img src="https://github.com/user-attachments/assets/78ce1062-80a0-4edb-bf6b-5efac9dd992e" alt="이은서" width="150"> | <img src="https://github.com/user-attachments/assets/beea8c64-19de-4d91-955f-ed24b813a638" alt="최정인" width="150"> |
  | BE | BE | BE | BE |
  | [GitHub](https://github.com/mordor8378) | [GitHub](https://github.com/Si159521) | [GitHub](https://github.com/monimoni12) | [GitHub](https://github.com/bombab) |
  
