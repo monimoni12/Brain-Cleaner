@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/52c8df53-feef-427e-b2ad-7345a7cd14e5)<a href="https://www.braincleaner.site/" target="_blank">
+ <a href="https://www.braincleaner.site/" target="_blank">
  <img src="https://github.com/user-attachments/assets/d8eab06f-d8da-42f8-87fd-711dd0366353" alt="배너" width="100%"/>
  </a>
 
