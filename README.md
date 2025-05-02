@@ -28,11 +28,11 @@
 
  <br/>
  <br/>
- 
+
  # 2. Team Members (팀원 및 팀 소개)
  | 유재현 | 이서영 | 이은서 | 최정인 |
  |:------:|:------:|:------:|:------:|
- | <img src="https://github.com/user-attachments/assets/c1c2b1e3-656d-4712-98ab-a15e91efa2da" alt="유재현" width="150"> | <img src="https://github.com/user-attachments/assets/78ec4937-81bb-4637-975d-631eb3c4601e" alt="이서영" width="150"> | <img src="https://github.com/user-attachments/assets/78ce1062-80a0-4edb-bf6b-5efac9dd992e" alt="이은서" width="150"> | <img src="https://github.com/user-attachments/assets/beea8c64-19de-4d91-955f-ed24b813a638" alt="최정인" width="150"> |
+ | <img src="https://github.com/user-attachments/assets/365c72d7-2939-40c3-926a-59c86da3e39b" alt="유재현" width="150"> | <img src="https://github.com/user-attachments/assets/78ec4937-81bb-4637-975d-631eb3c4601e" alt="이서영" width="150"> | <img src="https://github.com/user-attachments/assets/78ce1062-80a0-4edb-bf6b-5efac9dd992e" alt="이은서" width="150"> | <img src="https://github.com/user-attachments/assets/beea8c64-19de-4d91-955f-ed24b813a638" alt="최정인" width="150"> |
  | BE | BE | BE | BE |
  | [GitHub](https://github.com/mordor8378) | [GitHub](https://github.com/Si159521) | [GitHub](https://github.com/monimoni12) | [GitHub](https://github.com/bombab) |
  
@@ -94,7 +94,7 @@
  # 4. Tasks & Responsibilities (작업 및 역할 분담)
  |  |  |  |
  |-----------------|-----------------|-----------------|
- | 유재현   |  <img src=" " width="100"> | <ul><li>회원 인증</li><li>일반 / 소셜 로그인, 토큰 관리 </li><li>메인 페이지 일부 구성요소</li></ul>     |
+ | 유재현   |  <img src="https://github.com/user-attachments/assets/365c72d7-2939-40c3-926a-59c86da3e39b" width="100"> | <ul><li>회원 인증</li><li>일반 / 소셜 로그인, 토큰 관리 </li><li>메인 페이지 일부 구성요소</li></ul>     |
  | 이서영   |  <img src="https://github.com/user-attachments/assets/eb93e3ee-4b64-41e4-9672-745062936efd" width = "100">| <ul><li>메인 페이지 일부 구성요소</li><li>팔로우기능 개발</li><li>댓글 기능 개발</li></ul> |
  | 이은서   |  <img src=" " width="100">    |<ul><li>BrainCleaner🧠의 시그니처 디자인!✌🏻 </li><li>게시판 CRUD</li><li>카테고리별 목록 조회 및 검색 기능</li><li>포인트 상점 기능</li><li>댓글 기능 일부 및 좋아요 기능 </li></ul>  |
  | 최정인    |  <img src=" " width="100">    | <ul><li>관리자 관리 기능</li><li>포인트 자동 적립  / 등업 기능</li></ul>    |
