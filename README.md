@@ -1,4 +1,4 @@
-<a href="https://www.braincleaner.site/" target="_blank">
+![image](https://github.com/user-attachments/assets/52c8df53-feef-427e-b2ad-7345a7cd14e5)<a href="https://www.braincleaner.site/" target="_blank">
  <img src="https://github.com/user-attachments/assets/d8eab06f-d8da-42f8-87fd-711dd0366353" alt="배너" width="100%"/>
  </a>
 
@@ -17,7 +17,7 @@
  :: Spring Boot ::                (v3.4.4)
 
  ```
-🧠 [서비스 링크](https://www.braincleaner.site/)
+🖱️ [서비스 링크](https://www.braincleaner.site/)
  
  <br/>
  <br/>
@@ -64,14 +64,14 @@
    - 인증게시글 이외 정보공유게시글, 자유게시글 작성을 통해 다른 유저들과 소통하고 도파민디톡스에 유용한 정보를 얻어갈 수 있습니다.
    - 게시글을 작성하면 포인트가 지급됩니다.
 
-- 회원별 등급제도
-   - 인증게시글, 정보공유게시글, 자유게시글 작성을 통해 얻은 포인트가 누적되면 등업이 가능합니다.
-   - 게시판 종류별 포인트는 다음과 같습니다.
+- **회원별 등급제도**
+   - _인증게시글_, _정보공유게시글_, _자유게시글_ 작성을 통해 얻은 포인트가 누적되면 등업이 가능합니다.
+   - **게시판 종류별 포인트**는 다음과 같습니다.
       - 인증게시판 : 50점
       - 정보공유게시판 : 20점
       - 자유게시판 : 10점
    - (댓글 작성시 포인트 지급도 예정중에 있습니다.)
-   - 회원 등급은 다음과 같습니다.
+   - **회원 등급**은 다음과 같습니다.
       - 디톡스새싹 : 0점
       - 절제수련생 : 100점
       - 집중탐험가 : 600점
@@ -224,53 +224,44 @@ fe/ (Frontend - Next.js / TypeScript)
  ## 브랜치 전략 (Branch Strategy)
  우리의 브랜치 전략은 Git Flow를 기반으로 하며, 다음과 같은 브랜치를 사용합니다.
  
- - dev Branch
+ - **🌿dev**
    - 배포 가능한 상태의 코드를 유지합니다.
    - 모든 배포는 이 브랜치에서 이루어집니다.
  
- - feature/#{number} Branch
+ - **🌿feature/#{number}**
    - feature 개발 브랜치입니다.
    - 모든 기능 개발은 이 브랜치에서 이루어집니다.
 
- - refactor/#{number} Branch
+ - **🌿refactor/#{number}**
    - 리팩토링 브랜치입니다.
    - 구조 및 기타 개선사항 반영은 이 브랜치에서 이루어집니다.
 
- - fix/#{number} Branch
+ - **🌿fix/#{number}**
    - 버그 수정 브랜치입니다.
    - bugfix는 이 브랜치에서 이루어집니다. 
  <br/>
  <br/>
  
  # 8. Coding Convention
- ## 문장 종료
- ```
- // 세미콜론(;)
- console.log("Hello World!");
- ```
- 
- <br/>
- 
- 
- ## 명명 규칙
+## 명명 규칙
 ### 💻 Java 쪽 컨벤션
-| 항목      | 표기법                | 예시                               | 설명             |
-| ------- | ------------------ | -------------------------------- | -------------- |
+| 항목 | 표기법 | 예시 | 설명 |
+| :----------: | :----------: | :----------: | :----------: |
 | 클래스명    | PascalCase         | `PostCategory`, `UserController` | 파일 이름 = 클래스 이름 |
-| 변수명/필드명 | camelCase          | `createdAt`, `userId`            | 첫 글자 소문자       |
-| 메서드명    | camelCase          | `getUserName()`, `createPost()`  | 동사 중심          |
-| 패키지명    | lowercase + 점(.)   | `com.example.post.entity`        | 전부 소문자         |
-| 제네릭 타입  | PascalCase         | `List<Post>`                     | 클래스명 기준        |
-| enum 상수 | UPPER\_SNAKE\_CASE | `PENDING`, `APPROVED_REJECTED`   | 고정된 상수 이름      |
+| 변수명/필드명 | camelCase          | `createdAt`, `userId`            | 첫 글자 소문자 |
+| 메서드명    | camelCase          | `getUserName()`, `createPost()`  | 동사 중심 |
+| 패키지명    | lowercase + 점(.)   | `com.example.post.entity`        | 전부 소문자 |
+| 제네릭 타입  | PascalCase         | `List<Post>`                     | 클래스명 기준 |
+| enum 상수 | UPPER\_SNAKE\_CASE | `PENDING`, `APPROVED_REJECTED`   | 고정된 상수 이름 |
 
 
 ### 🗄️ DB (JPA 매핑 관련) 컨벤션
-| 항목         | 표기법         | 예시                          | 설명                 |
-| ---------- | ----------- | --------------------------- | ------------------ |
-| 테이블명       | snake\_case | `"post_category"`           | DB 테이블명에 맞춰 작성     |
-| 컬럼명        | snake\_case | `"created_at"`, `"user_id"` | DB 컬럼명에 맞춰 작성      |
+| 항목 | 표기법 | 예시 | 설명 |
+| :-----------: | :----------: | :----------: | :----------: |
+| 테이블명 | snake\_case | `"post_category"`           | DB 테이블명에 맞춰 작성     |
+| 컬럼명 | snake\_case | `"created_at"`, `"user_id"` | DB 컬럼명에 맞춰 작성      |
 | 시퀀스명/제약조건명 | snake\_case | `post_id_seq`, `fk_user_id` | 대부분 snake\_case 사용 |
-| 기본키        | snake\_case | `post_id`, `user_id`        | 보통 테이블명 + `_id`    |
+| 기본키 | snake\_case | `post_id`, `user_id`        | 보통 테이블명 + `_id`    |
 
 
 
@@ -279,16 +270,16 @@ fe/ (Frontend - Next.js / TypeScript)
  
 
 ## 이슈 네이밍
-| 태그           | 의미                         |
-| ------------ | -------------------------- |
-| `FEAT`       | 새로운 기능 추가                  |
-| `FIX`        | 버그 수정                      |
-| `REFACTOR`   | 리팩토링 (기능 변경 없이 코드 개선)      |
-| `DOCS`       | 문서 수정                      |
-| `STYLE`      | 코드 포맷팅, 세미콜론 누락 등 의미 없는 변경 |
-| `TEST`       | 테스트 코드 관련                  |
-| `CHORE`      | 빌드 설정, 패키지 설치 등 잡일성 작업     |
-| `CI / BUILD` | CI/CD 관련 설정 작업             |
+| 태그 | 의미 |
+| :-----------: | :-----------: |
+| `FEAT` | 새로운 기능 추가 |
+| `FIX` | 버그 수정 |
+| `REFACTOR` | 리팩토링 (기능 변경 없이 코드 개선) |
+| `DOCS` | 문서 수정 |
+| `STYLE` | 코드 포맷팅, 세미콜론 누락 등 의미 없는 변경 |
+| `TEST` | 테스트 코드 관련 |
+| `CHORE` | 빌드 설정, 패키지 설치 등 잡일성 작업 |
+| `CI / BUILD` | CI/CD 관련 설정 작업 |
 
  
  <br/>
