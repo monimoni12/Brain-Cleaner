@@ -252,7 +252,7 @@ fe/ (Frontend - Next.js / TypeScript)
  
  
  ## 명명 규칙
-💻 Java 쪽 컨벤션
+### 💻 Java 쪽 컨벤션
 | 항목      | 표기법                | 예시                               | 설명             |
 | ------- | ------------------ | -------------------------------- | -------------- |
 | 클래스명    | PascalCase         | `PostCategory`, `UserController` | 파일 이름 = 클래스 이름 |
@@ -263,7 +263,7 @@ fe/ (Frontend - Next.js / TypeScript)
 | enum 상수 | UPPER\_SNAKE\_CASE | `PENDING`, `APPROVED_REJECTED`   | 고정된 상수 이름      |
 
 
-🗄️ DB (JPA 매핑 관련) 컨벤션
+### 🗄️ DB (JPA 매핑 관련) 컨벤션
 | 항목         | 표기법         | 예시                          | 설명                 |
 | ---------- | ----------- | --------------------------- | ------------------ |
 | 테이블명       | snake\_case | `"post_category"`           | DB 테이블명에 맞춰 작성     |
