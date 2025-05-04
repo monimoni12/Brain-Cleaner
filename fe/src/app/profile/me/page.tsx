@@ -1,13 +1,15 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { UserInfo } from "@/types/user";
-import Link from "next/link";
-import { FaStore, FaCog } from "react-icons/fa";
-import CommentModal from "@/components/CommentModal";
-import { useGlobalEmojis, convertEmojiCodesToImages } from "@/utils/emojiUtils";
+import React from 'react';
+import Image from 'next/image';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { UserInfo } from '@/types/user';
+import Link from 'next/link';
+import { FaStore, FaCog } from 'react-icons/fa';
+import CommentModal from '@/components/CommentModal';
+import { useGlobalEmojis, convertEmojiCodesToImages } from '@/utils/emojiUtils';
+import { Comment } from '@/types/comment';
 
 interface Post {
   postId: number;
@@ -26,23 +28,160 @@ interface Post {
   commentCount?: number;
 }
 
-const CUSTOM_PINK = "#F742CD";
+const CUSTOM_PINK = '#F742CD';
+
+const MONTH_LABELS = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
 
 const BADGES = [
-  { name: "디톡스새싹", requiredPoints: 0, emoji: "🌱" },
-  { name: "절제수련생", requiredPoints: 100, emoji: "🧘" },
-  { name: "집중탐험가", requiredPoints: 600, emoji: "🔍" },
-  { name: "선명한의식", requiredPoints: 2000, emoji: "✨" },
-  { name: "도파민파괴자", requiredPoints: 4500, emoji: "💥" },
-  { name: "브레인클리너", requiredPoints: 7500, emoji: "🧠" },
+  { name: '디톡스새싹', requiredPoints: 0, emoji: '🌱' },
+  { name: '절제수련생', requiredPoints: 100, emoji: '🧘' },
+  { name: '집중탐험가', requiredPoints: 600, emoji: '🔍' },
+  { name: '선명한의식', requiredPoints: 2000, emoji: '✨' },
+  { name: '도파민파괴자', requiredPoints: 4500, emoji: '💥' },
+  { name: '브레인클리너', requiredPoints: 7500, emoji: '🧠' },
 ];
+
+type YearlyVerificationGrassProps = {
+  year: number;
+  token?: string;
+};
+
+function YearlyVerificationGrass(props: YearlyVerificationGrassProps) {
+  const { year, token } = props;
+  const [days, setDays] = useState<{ date: string; verified: boolean }[]>([]);
+
+  useEffect(() => {
+    fetch(`/api/v1/users/me/verification-history?year=${year}`, {
+      credentials: 'include',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
+      .then((res) => res.json())
+      .then(setDays);
+  }, [year, token]);
+
+  // 1월 1일 이전 칸(작년 12월 등)은 null(투명)로, 1월 1일부터만 타일이 나오도록
+  const data = days; // [{ date: 'YYYY-MM-DD', verified: true/false }, ...]
+  const startDate = new Date(year, 0, 1);
+  const endDate = new Date(year, 11, 31);
+  const startOffset = startDate.getDay();
+  const totalDays =
+    Math.floor(
+      (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+    ) + 1;
+  const totalCells = startOffset + totalDays;
+  const totalWeeks = Math.ceil(totalCells / 7);
+  const paddedWeeks = [...Array(totalWeeks)].map((_, weekIndex) => {
+    return [...Array(7)].map((_, dayIndex) => {
+      const cellIndex = weekIndex * 7 + dayIndex;
+      if (cellIndex < startOffset) return null;
+      const date = new Date(startDate);
+      date.setDate(cellIndex - startOffset + 1);
+      if (date > endDate) return null;
+      const dateStr = date.toISOString().split('T')[0];
+      const matched = data.find((d) => d.date === dateStr);
+      return matched ?? { date: dateStr, verified: false };
+    });
+  });
+
+  // GitHub 스타일: 각 월의 첫 등장 주 인덱스 구하기
+  const monthFirstWeekIdx: { [month: number]: number } = {};
+  paddedWeeks.forEach((week, wIdx) => {
+    console.log(
+      'week',
+      wIdx,
+      week.map((cell) => cell && cell.date)
+    );
+    for (const cell of week) {
+      if (cell) {
+        const month = new Date(cell.date).getMonth();
+        if (!(month in monthFirstWeekIdx)) {
+          monthFirstWeekIdx[month] = wIdx;
+        }
+      }
+    }
+  });
+
+  return (
+    <div className="mt-8 flex justify-center">
+      <div className="overflow-x-auto rounded-lg border bg-white py-4 px-2 shadow-sm">
+        {/* 월 라벨 */}
+        <div className="flex ml-8 mb-1">
+          <div className="w-6" />
+          {paddedWeeks.map((_, wIdx) => {
+            const MONTH_LABEL_WEEKS = [
+              0, 5, 9, 13, 17, 22, 26, 30, 35, 39, 44, 48,
+            ];
+            const monthIdx = MONTH_LABEL_WEEKS.indexOf(wIdx);
+            return (
+              <div key={wIdx} className="w-4" style={{ minWidth: '1rem' }}>
+                {monthIdx !== -1 ? (
+                  <span className="text-xs text-gray-500 font-bold">
+                    {MONTH_LABELS[monthIdx]}
+                  </span>
+                ) : null}
+              </div>
+            );
+          })}
+        </div>
+        <div className="flex">
+          {/* 요일 라벨 (왼쪽 세로) */}
+          <div className="flex flex-col justify-between h-[112px] mr-2 text-xs text-gray-500 mt-2">
+            <span style={{ visibility: 'hidden' }}>Sun</span>
+            <span>Mon</span>
+            <span style={{ visibility: 'hidden' }}>Tue</span>
+            <span>Wed</span>
+            <span style={{ visibility: 'hidden' }}>Thu</span>
+            <span>Fri</span>
+            <span style={{ visibility: 'hidden' }}>Sat</span>
+          </div>
+          {/* 잔디 영역 (grid-rows-7 grid-flow-col) */}
+          <div className="grid grid-rows-7 grid-flow-col gap-[3px]">
+            {paddedWeeks.map((week, colIdx) =>
+              week.map((day, rowIdx) => (
+                <div
+                  key={`${colIdx}-${rowIdx}`}
+                  className={
+                    day
+                      ? `w-4 h-4 rounded-[3px] border border-gray-300 transition-all duration-200 ${
+                          day.verified
+                            ? 'bg-pink-500 border-pink-400'
+                            : 'bg-gray-200 border-gray-300'
+                        }`
+                      : 'w-4 h-4'
+                  }
+                  title={day ? day.date : ''}
+                />
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// 확장된 Comment 타입 (post 속성 추가)
+type UserComment = Comment & { post?: Post };
 
 export default function MyProfile() {
   const router = useRouter();
   const [userInfo, setUserInfo] = useState<UserInfo>({
     id: null,
-    nickname: "",
-    email: "",
+    nickname: '',
+    email: '',
     remainingPoint: 0,
     totalPoint: 0,
     createdAt: null,
@@ -59,7 +198,7 @@ export default function MyProfile() {
     badges: 12,
   });
 
-  const [selectedTab, setSelectedTab] = useState("feed");
+  const [selectedTab, setSelectedTab] = useState('feed');
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -79,7 +218,7 @@ export default function MyProfile() {
   const [showCommentModal, setShowCommentModal] = useState(false);
 
   // 새로 추가한 상태
-  const [userComments, setUserComments] = useState<any[]>([]);
+  const [userComments, setUserComments] = useState<UserComment[]>([]);
   const [commentsLoading, setCommentsLoading] = useState(false);
   const { globalEmojis, isLoading: isGlobalEmojisLoading } = useGlobalEmojis();
   const [isEmojiLoaded, setIsEmojiLoaded] = useState(false);
@@ -94,25 +233,25 @@ export default function MyProfile() {
     const fetchUserInfo = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}` + "/api/v1/users/me",
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}` + '/api/v1/users/me',
           {
-            credentials: "include",
+            credentials: 'include',
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
               // 캐시 방지
-              "Cache-Control": "no-cache, no-store, must-revalidate",
-              Pragma: "no-cache",
+              'Cache-Control': 'no-cache, no-store, must-revalidate',
+              Pragma: 'no-cache',
             },
           }
         );
 
         if (response.ok) {
           const data = await response.json();
-          console.log("프로필 데이터 로드 (원본):", data);
+          console.log('프로필 데이터 로드 (원본):', data);
           console.log(
-            "detoxGoal 타입:",
+            'detoxGoal 타입:',
             typeof data.detoxGoal,
-            "값:",
+            '값:',
             data.detoxGoal
           );
 
@@ -120,7 +259,7 @@ export default function MyProfile() {
             ...data,
             profileImage: data.profileImageUrl,
           };
-          console.log("변환 후 userData:", userData);
+          console.log('변환 후 userData:', userData);
           setUserInfo(userData);
 
           if (data.id) {
@@ -130,11 +269,11 @@ export default function MyProfile() {
             fetchUserComments(data.id);
           }
         } else {
-          console.error("프로필 정보를 불러오는데 실패했습니다.");
-          router.push("/login");
+          console.error('프로필 정보를 불러오는데 실패했습니다.');
+          router.push('/login');
         }
       } catch (error) {
-        console.error("Error fetching user info:", error);
+        console.error('Error fetching user info:', error);
       } finally {
         setIsLoading(false);
       }
@@ -150,14 +289,14 @@ export default function MyProfile() {
           `${process.env.NEXT_PUBLIC_API_BASE_URL}` +
             `/api/v1/follows/${userId}/followers/number`,
           {
-            credentials: "include",
+            credentials: 'include',
           }
         ),
         fetch(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}` +
             `/api/v1/follows/${userId}/followings/number`,
           {
-            credentials: "include",
+            credentials: 'include',
           }
         ),
       ]);
@@ -168,7 +307,7 @@ export default function MyProfile() {
         setFollowStats({ followers, following });
       }
     } catch (error) {
-      console.error("Error fetching follow stats:", error);
+      console.error('Error fetching follow stats:', error);
     }
   };
 
@@ -178,7 +317,7 @@ export default function MyProfile() {
         `${process.env.NEXT_PUBLIC_API_BASE_URL}` +
           `/api/v1/posts/user/${userId}`,
         {
-          credentials: "include",
+          credentials: 'include',
         }
       );
 
@@ -187,20 +326,20 @@ export default function MyProfile() {
         setPosts(data);
       }
     } catch (error) {
-      console.error("Error fetching user posts:", error);
+      console.error('Error fetching user posts:', error);
     }
   };
 
   const fetchVerificationStats = async (userId: number) => {
     try {
-      console.log("fetchVerificationStats 시작, 현재 userInfo:", userInfo);
+      console.log('fetchVerificationStats 시작, 현재 userInfo:', userInfo);
 
       // 1. 연속 인증일수 가져오기
       const streakResponse = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}` +
           `/api/v1/verifications/streak`,
         {
-          credentials: "include",
+          credentials: 'include',
         }
       );
 
@@ -213,7 +352,7 @@ export default function MyProfile() {
       const categoryPostsResponse = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}` + `/api/v1/posts/category/1`,
         {
-          credentials: "include",
+          credentials: 'include',
         }
       );
 
@@ -238,22 +377,22 @@ export default function MyProfile() {
 
         // 최신 userInfo 가져오기
         const latestUserInfo = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}` + "/api/v1/users/me",
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}` + '/api/v1/users/me',
           {
-            credentials: "include",
+            credentials: 'include',
             headers: {
-              "Content-Type": "application/json",
-              "Cache-Control": "no-cache, no-store, must-revalidate",
+              'Content-Type': 'application/json',
+              'Cache-Control': 'no-cache, no-store, must-revalidate',
             },
           }
         ).then((res) => res.json());
 
-        console.log("최신 사용자 정보:", latestUserInfo);
-        console.log("최신 detoxGoal:", latestUserInfo.detoxGoal);
+        console.log('최신 사용자 정보:', latestUserInfo);
+        console.log('최신 detoxGoal:', latestUserInfo.detoxGoal);
 
         // 목표 달성률 계산 - detoxGoal이 설정되어 있고 0보다 큰 경우에만 계산
         let completionRate = 0;
-        let detoxGoal = latestUserInfo.detoxGoal;
+        const detoxGoal = latestUserInfo.detoxGoal;
 
         if (detoxGoal && detoxGoal > 0) {
           completionRate = Math.min(
@@ -262,9 +401,9 @@ export default function MyProfile() {
           );
         }
 
-        console.log("사용 중인 detoxGoal:", detoxGoal);
-        console.log("totalDetoxTime:", totalDetoxTime);
-        console.log("계산된 completionRate:", completionRate);
+        console.log('사용 중인 detoxGoal:', detoxGoal);
+        console.log('totalDetoxTime:', totalDetoxTime);
+        console.log('계산된 completionRate:', completionRate);
 
         // stats 상태 업데이트
         setStats({
@@ -276,7 +415,7 @@ export default function MyProfile() {
         });
       }
     } catch (error) {
-      console.error("Error fetching verification stats:", error);
+      console.error('Error fetching verification stats:', error);
     }
   };
 
@@ -288,67 +427,81 @@ export default function MyProfile() {
         `${process.env.NEXT_PUBLIC_API_BASE_URL}` +
           `/api/v1/comments/user/${userId}`,
         {
-          credentials: "include",
+          credentials: 'include',
         }
       );
 
       if (response.ok) {
         const comments = await response.json();
-        console.log("사용자 댓글 데이터:", comments);
+        console.log('사용자 댓글 데이터:', comments);
 
         if (!Array.isArray(comments)) {
-          console.error("댓글 데이터가 배열이 아닙니다:", comments);
+          console.error('댓글 데이터가 배열이 아닙니다:', comments);
           setUserComments([]);
           return;
         }
 
         // 댓글 데이터 정제 (snake_case -> camelCase)
-        const processedComments = comments.map((comment: any) => ({
-          ...comment,
-          userId: comment.userId || comment.user_id,
-          postId: comment.postId || comment.post_id,
-          parentId: comment.parentId || comment.parent_id,
-          createdAt: comment.createdAt || comment.created_at,
-          updatedAt: comment.updatedAt || comment.updated_at,
-        }));
+        const processedComments = comments.map(
+          (comment: unknown): UserComment => {
+            const c = comment as Record<string, unknown>;
+            return {
+              id: Number(c.id),
+              postId: Number(c.postId ?? c.post_id),
+              userId: Number(c.userId ?? c.user_id),
+              userNickname: String(c.userNickname ?? c.user_nickname ?? ''),
+              content: String(c.content ?? ''),
+              parentId:
+                c.parentId !== undefined && c.parentId !== null
+                  ? Number(c.parentId)
+                  : c.parent_id !== undefined && c.parent_id !== null
+                  ? Number(c.parent_id)
+                  : null,
+              createdAt: String(c.createdAt ?? c.created_at ?? ''),
+              updatedAt: String(c.updatedAt ?? c.updated_at ?? ''),
+              detoxTime:
+                c.detoxTime !== undefined ? Number(c.detoxTime) : undefined,
+            };
+          }
+        );
 
         // 필요한 게시글 정보 가져오기
         const commentsWithPostInfo = await Promise.all(
-          processedComments.map(async (comment: any) => {
-            if (!comment.postId) {
-              return comment;
-            }
-
-            try {
-              const postResponse = await fetch(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}` +
-                  `/api/v1/posts/${comment.postId}`,
-                {
-                  credentials: "include",
-                }
-              );
-
-              if (postResponse.ok) {
-                const post = await postResponse.json();
-                return { ...comment, post };
+          processedComments.map(
+            async (comment: UserComment): Promise<UserComment> => {
+              if (!comment.postId) {
+                return comment;
               }
-              return comment;
-            } catch (error) {
-              console.error(
-                `댓글 ID ${comment.id}의 게시글 정보 로드 중 오류:`,
-                error
-              );
-              return comment;
+              try {
+                const postResponse = await fetch(
+                  `${process.env.NEXT_PUBLIC_API_BASE_URL}` +
+                    `/api/v1/posts/${comment.postId}`,
+                  {
+                    credentials: 'include',
+                  }
+                );
+                if (postResponse.ok) {
+                  const post = await postResponse.json();
+                  return { ...comment, post };
+                }
+                return comment;
+              } catch (error) {
+                console.error(
+                  `댓글 ID ${comment.id}의 게시글 정보 로드 중 오류:`,
+                  error
+                );
+                return comment;
+              }
             }
-          })
+          )
         );
 
         setUserComments(commentsWithPostInfo);
       } else {
-        console.error("댓글 조회 API 오류:", response.status);
+        console.error('댓글 조회 API 오류:', response.status);
       }
     } catch (error) {
-      console.error("사용자 댓글 로드 중 오류:", error);
+      console.error('사용자 댓글 로드 중 오류:', error);
     } finally {
       setCommentsLoading(false);
     }
@@ -367,7 +520,7 @@ export default function MyProfile() {
     if (days > 0) return `${days}일 전`;
     if (hours > 0) return `${hours}시간 전`;
     if (minutes > 0) return `${minutes}분 전`;
-    return "방금 전";
+    return '방금 전';
   };
 
   // 팔로워 목록 가져오기 - "나를 팔로우하는 사람들"
@@ -378,7 +531,7 @@ export default function MyProfile() {
         `${process.env.NEXT_PUBLIC_API_BASE_URL}` +
           `/api/v1/follows/${userId}/followers`,
         {
-          credentials: "include",
+          credentials: 'include',
         }
       );
 
@@ -387,7 +540,7 @@ export default function MyProfile() {
         setFollowers(data);
       }
     } catch (error) {
-      console.error("Error fetching followers:", error);
+      console.error('Error fetching followers:', error);
     } finally {
       setIsLoadingFollows(false);
     }
@@ -401,7 +554,7 @@ export default function MyProfile() {
         `${process.env.NEXT_PUBLIC_API_BASE_URL}` +
           `/api/v1/follows/${userId}/followings`,
         {
-          credentials: "include",
+          credentials: 'include',
         }
       );
 
@@ -410,7 +563,7 @@ export default function MyProfile() {
         setFollowings(data);
       }
     } catch (error) {
-      console.error("Error fetching followings:", error);
+      console.error('Error fetching followings:', error);
     } finally {
       setIsLoadingFollows(false);
     }
@@ -472,7 +625,7 @@ export default function MyProfile() {
   };
 
   // 댓글 클릭시 해당 게시글 모달 표시 함수
-  const handleCommentClick = (comment: any) => {
+  const handleCommentClick = (comment: UserComment) => {
     if (comment.post) {
       setSelectedPost(comment.post);
       setShowCommentModal(true);
@@ -481,51 +634,51 @@ export default function MyProfile() {
 
   // 이미지 URL을 안전하게 파싱하는 함수
   const getSafeImageUrl = (imageUrl: string | string[]): string => {
-    if (!imageUrl) return "";
+    if (!imageUrl) return '';
 
     try {
       // 배열인 경우
       if (Array.isArray(imageUrl) && imageUrl.length > 0) {
         // 유효한 URL만 반환
         for (let i = 0; i < imageUrl.length; i++) {
-          if (imageUrl[i] && imageUrl[i].trim() !== "") {
+          if (imageUrl[i] && imageUrl[i].trim() !== '') {
             return imageUrl[i];
           }
         }
-        return "";
+        return '';
       }
 
       // JSON 문자열인 경우
       if (
-        typeof imageUrl === "string" &&
-        imageUrl.startsWith("[") &&
-        imageUrl.endsWith("]")
+        typeof imageUrl === 'string' &&
+        imageUrl.startsWith('[') &&
+        imageUrl.endsWith(']')
       ) {
         try {
           const parsed = JSON.parse(imageUrl);
           if (Array.isArray(parsed) && parsed.length > 0) {
             // 유효한 URL만 반환
             for (let i = 0; i < parsed.length; i++) {
-              if (parsed[i] && parsed[i].trim() !== "") {
+              if (parsed[i] && parsed[i].trim() !== '') {
                 return parsed[i];
               }
             }
           }
         } catch (e) {
-          console.error("이미지 URL JSON 파싱 오류:", e);
+          console.error('이미지 URL JSON 파싱 오류:', e);
         }
-        return "";
+        return '';
       }
 
       // 일반 문자열인 경우
-      if (typeof imageUrl === "string" && imageUrl.trim() !== "") {
+      if (typeof imageUrl === 'string' && imageUrl.trim() !== '') {
         return imageUrl;
       }
 
-      return "";
+      return '';
     } catch (e) {
-      console.error("이미지 URL 파싱 오류:", e);
-      return "";
+      console.error('이미지 URL 파싱 오류:', e);
+      return '';
     }
   };
 
@@ -552,7 +705,7 @@ export default function MyProfile() {
               <FaStore />
             </Link>
             <button
-              onClick={() => router.push("/profile/me/edit")}
+              onClick={() => router.push('/profile/me/edit')}
               className="text-xl hover:opacity-70 transition-colors"
               style={{ color: CUSTOM_PINK }}
             >
@@ -592,7 +745,7 @@ export default function MyProfile() {
             {/* Status Message */}
             <div className="w-[16rem]">
               <textarea
-                value={userInfo.statusMessage || ""}
+                value={userInfo.statusMessage || ''}
                 onChange={(e) => {
                   setUserInfo({
                     ...userInfo,
@@ -602,11 +755,11 @@ export default function MyProfile() {
                 className="w-full text-sm text-gray-600 bg-transparent border-none resize-none focus:outline-none placeholder:text-transparent hover:placeholder:text-gray-400 transition-all overflow-hidden caret-[#F742CD]"
                 rows={1}
                 placeholder="상태 메시지를 입력하세요..."
-                style={{ height: "auto" }}
+                style={{ height: 'auto' }}
                 onInput={(e) => {
                   const target = e.target as HTMLTextAreaElement;
-                  target.style.height = "auto";
-                  target.style.height = target.scrollHeight + "px";
+                  target.style.height = 'auto';
+                  target.style.height = target.scrollHeight + 'px';
                 }}
               />
             </div>
@@ -649,7 +802,7 @@ export default function MyProfile() {
                 >
                   <div
                     className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                      isEarned ? "bg-gray-100" : "bg-gray-50 opacity-30"
+                      isEarned ? 'bg-gray-100' : 'bg-gray-50 opacity-30'
                     }`}
                   >
                     <span className="text-lg">{badge.emoji}</span>
@@ -657,7 +810,7 @@ export default function MyProfile() {
                   <span
                     className="text-xs mt-1 text-center"
                     style={{
-                      color: isEarned ? CUSTOM_PINK : "rgb(107 114 128)",
+                      color: isEarned ? CUSTOM_PINK : 'rgb(107 114 128)',
                     }}
                   >
                     {badge.name}
@@ -672,40 +825,40 @@ export default function MyProfile() {
         <div className="border-b border-gray-200 mb-8">
           <nav className="flex justify-center">
             <button
-              onClick={() => setSelectedTab("feed")}
+              onClick={() => setSelectedTab('feed')}
               className={`pb-4 px-8 w-40 text-center ${
-                selectedTab === "feed"
+                selectedTab === 'feed'
                   ? `border-b-2 border-[${CUSTOM_PINK}]`
-                  : "text-gray-500"
+                  : 'text-gray-500'
               }`}
               style={{
-                color: selectedTab === "feed" ? CUSTOM_PINK : undefined,
+                color: selectedTab === 'feed' ? CUSTOM_PINK : undefined,
               }}
             >
               피드
             </button>
             <button
-              onClick={() => setSelectedTab("comments")}
+              onClick={() => setSelectedTab('comments')}
               className={`pb-4 px-8 w-40 text-center ${
-                selectedTab === "comments"
+                selectedTab === 'comments'
                   ? `border-b-2 border-[${CUSTOM_PINK}]`
-                  : "text-gray-500"
+                  : 'text-gray-500'
               }`}
               style={{
-                color: selectedTab === "comments" ? CUSTOM_PINK : undefined,
+                color: selectedTab === 'comments' ? CUSTOM_PINK : undefined,
               }}
             >
               댓글
             </button>
             <button
-              onClick={() => setSelectedTab("stats")}
+              onClick={() => setSelectedTab('stats')}
               className={`pb-4 px-8 w-40 text-center ${
-                selectedTab === "stats"
+                selectedTab === 'stats'
                   ? `border-b-2 border-[${CUSTOM_PINK}]`
-                  : "text-gray-500"
+                  : 'text-gray-500'
               }`}
               style={{
-                color: selectedTab === "stats" ? CUSTOM_PINK : undefined,
+                color: selectedTab === 'stats' ? CUSTOM_PINK : undefined,
               }}
             >
               디톡스정보
@@ -714,7 +867,7 @@ export default function MyProfile() {
         </div>
 
         {/* Tab Contents */}
-        {selectedTab === "feed" && (
+        {selectedTab === 'feed' && (
           <div className="grid grid-cols-2 gap-4">
             {posts.length > 0 ? (
               posts.map((post) => (
@@ -770,8 +923,8 @@ export default function MyProfile() {
                         className="w-full h-full object-cover"
                         unoptimized={true}
                         onError={(e) => {
-                          console.error("이미지 로드 실패:", post.imageUrl);
-                          (e.target as HTMLImageElement).style.display = "none";
+                          console.error('이미지 로드 실패:', post.imageUrl);
+                          (e.target as HTMLImageElement).style.display = 'none';
                         }}
                       />
                     </div>
@@ -801,7 +954,7 @@ export default function MyProfile() {
           </div>
         )}
 
-        {selectedTab === "comments" && (
+        {selectedTab === 'comments' && (
           <div className="space-y-4">
             {commentsLoading ? (
               <div className="flex justify-center py-10">
@@ -881,69 +1034,78 @@ export default function MyProfile() {
           </div>
         )}
 
-        {selectedTab === "stats" && (
-          <div className="max-w-[16rem] mx-auto mb-8 mt-12">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">총 인증일수</span>
-                <span className="font-medium" style={{ color: CUSTOM_PINK }}>
-                  {stats.detoxDays}일
-                </span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">연속 인증일수</span>
-                <span className="font-medium" style={{ color: CUSTOM_PINK }}>
-                  {stats.streakDays}일
-                </span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">현재 포인트</span>
-                <span className="font-medium" style={{ color: CUSTOM_PINK }}>
-                  {userInfo.remainingPoint}P
-                </span>
-              </div>
-              <div className="space-y-2">
+        {selectedTab === 'stats' && (
+          <>
+            <YearlyVerificationGrass year={new Date().getFullYear()} />
+            <div className="max-w-[16rem] mx-auto mb-8 mt-12">
+              <div className="space-y-3">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600">디지털 디톡스 시간</span>
+                  <span className="text-gray-600">총 인증일수</span>
                   <span className="font-medium" style={{ color: CUSTOM_PINK }}>
-                    {stats.detoxTime}시간
+                    {stats.detoxDays}일
                   </span>
                 </div>
-                <div className="h-2 bg-gray-100 rounded-full">
-                  <div
-                    className="h-full rounded-full transition-all duration-300"
-                    style={{
-                      width:
-                        userInfo.detoxGoal && userInfo.detoxGoal > 0
-                          ? `${Math.min(
-                              100,
-                              (stats.detoxTime / userInfo.detoxGoal) * 100
-                            )}%`
-                          : "0%",
-                      backgroundColor: CUSTOM_PINK,
-                    }}
-                  ></div>
-                </div>
-              </div>
-              <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600">목표 달성률</span>
+                  <span className="text-gray-600">연속 인증일수</span>
                   <span className="font-medium" style={{ color: CUSTOM_PINK }}>
-                    {stats.completionRate}%
+                    {stats.streakDays}일
                   </span>
                 </div>
-                <div className="h-2 bg-gray-100 rounded-full">
-                  <div
-                    className="h-full rounded-full transition-all duration-300"
-                    style={{
-                      width: `${stats.completionRate}%`,
-                      backgroundColor: CUSTOM_PINK,
-                    }}
-                  ></div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600">현재 포인트</span>
+                  <span className="font-medium" style={{ color: CUSTOM_PINK }}>
+                    {userInfo.remainingPoint}P
+                  </span>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-600">디지털 디톡스 시간</span>
+                    <span
+                      className="font-medium"
+                      style={{ color: CUSTOM_PINK }}
+                    >
+                      {stats.detoxTime}시간
+                    </span>
+                  </div>
+                  <div className="h-2 bg-gray-100 rounded-full">
+                    <div
+                      className="h-full rounded-full transition-all duration-300"
+                      style={{
+                        width:
+                          userInfo.detoxGoal && userInfo.detoxGoal > 0
+                            ? `${Math.min(
+                                100,
+                                (stats.detoxTime / userInfo.detoxGoal) * 100
+                              )}%`
+                            : '0%',
+                        backgroundColor: CUSTOM_PINK,
+                      }}
+                    ></div>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-600">목표 달성률</span>
+                    <span
+                      className="font-medium"
+                      style={{ color: CUSTOM_PINK }}
+                    >
+                      {stats.completionRate}%
+                    </span>
+                  </div>
+                  <div className="h-2 bg-gray-100 rounded-full">
+                    <div
+                      className="h-full rounded-full transition-all duration-300"
+                      style={{
+                        width: `${stats.completionRate}%`,
+                        backgroundColor: CUSTOM_PINK,
+                      }}
+                    ></div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </>
         )}
 
         {/* 팔로워 모달 */}
