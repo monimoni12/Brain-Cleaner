@@ -58,6 +58,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/v1/posts/**").permitAll()
                                 .requestMatchers("/api/v1/pointstore/items").permitAll()
                                 .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll() // OAuth2 엔드포인트
+                                .requestMatchers("/actuator/health").permitAll() // HealthCheck Actuator
                                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
                                 .requestMatchers("/error").permitAll()
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
