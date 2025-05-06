@@ -143,7 +143,7 @@ resource "aws_s3_bucket" "braincleaner_bucket" {
 
   tags = {
     Name = "braincleaner-images"
-    Environment = "dev"
+    Environment = "prod"
   }
 }
 
