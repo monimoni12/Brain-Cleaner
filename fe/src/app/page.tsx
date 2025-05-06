@@ -42,6 +42,103 @@ interface PostsResponse {
   number: number;
 }
 
+// 월별 인증 잔디 UI 컴포넌트 (개선)
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+function MonthlyVerificationGrass({
+  year,
+  month,
+  token,
+}: {
+  year: number;
+  month: number;
+  token?: string;
+}) {
+  const [days, setDays] = useState<{ date: string; verified: boolean }[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchData = () => {
+    setLoading(true);
+    fetch(`/api/v1/users/me/verification-history?year=${year}&month=${month}`, {
+      credentials: 'include',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
+      .then((res) => res.json())
+      .then(setDays)
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [year, month, token]);
+
+  const firstDay = new Date(year, month - 1, 1);
+  const lastDay = new Date(year, month, 0);
+  const totalDays = lastDay.getDate();
+  const grass: ({ date: string; verified: boolean } | null)[][] = [];
+  let week: ({ date: string; verified: boolean } | null)[] = [];
+  let dayIdx = 0;
+  for (let i = 0; i < firstDay.getDay(); i++) {
+    week.push(null);
+    dayIdx++;
+  }
+  for (let d = 1; d <= totalDays; d++) {
+    const dayData = days.find((v) =>
+      v.date.endsWith(`-${String(d).padStart(2, '0')}`)
+    );
+    week.push(dayData || { date: '', verified: false });
+    dayIdx++;
+    if (dayIdx % 7 === 0) {
+      grass.push(week);
+      week = [];
+    }
+  }
+  if (week.length > 0) grass.push(week);
+
+  const monthName = new Date(year, month - 1).toLocaleString('en-US', {
+    month: 'long',
+  });
+
+  return (
+    <div>
+      <div className="text-center font-bold mb-2">
+        {monthName} {year}
+      </div>
+      <div className="flex gap-1 mb-1">
+        {WEEKDAYS.map((day) => (
+          <span key={day} className="text-xs text-gray-500 w-5 text-center">
+            {day}
+          </span>
+        ))}
+      </div>
+      <div className="flex flex-col gap-1">
+        {loading ? (
+          <div className="text-gray-400 text-sm">Loading...</div>
+        ) : (
+          grass.map((week, i) => (
+            <div key={i} className="flex gap-1">
+              {week.map((day, j) =>
+                day ? (
+                  <div
+                    key={j}
+                    className={`w-5 h-5 rounded-sm border transition-all duration-200 ${
+                      day.verified
+                        ? 'bg-pink-500 border-pink-400'
+                        : 'bg-gray-200 border-gray-300'
+                    }`}
+                    title={day.date}
+                  ></div>
+                ) : (
+                  <div key={j} className="w-5 h-5" />
+                )
+              )}
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const { user, loading } = useUser();
   const [selectedBoard, setSelectedBoard] = useState('0');
@@ -949,25 +1046,19 @@ export default function Home() {
                     <div className="flex justify-between mb-4">
                       {['월', '화', '수', '목', '금', '토', '일'].map(
                         (day, index) => {
-                          // 요일에 해당하는 날짜 계산
                           const today = new Date();
-                          const dayOfWeek = today.getDay(); // 0: 일요일, 1: 월요일, ...
+                          const dayOfWeek = today.getDay();
                           const mondayOffset =
                             dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
                           const currentDate = new Date(today);
                           currentDate.setDate(
                             today.getDate() + mondayOffset + index
                           );
-
-                          // 날짜 문자열로 변환 (YYYY-MM-DD)
                           const dateString = currentDate
                             .toISOString()
                             .split('T')[0];
-
-                          // 이 날짜에 인증했는지 확인
                           const isVerified =
                             weeklyVerifications.includes(dateString);
-
                           return (
                             <span
                               key={day}
