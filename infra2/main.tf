@@ -143,7 +143,7 @@ resource "aws_s3_bucket" "braincleaner_bucket" {
 
   tags = {
     Name = "braincleaner-images"
-    Environment = "prod"
+    Environment = ""
   }
 }
 
@@ -253,7 +253,7 @@ defaults
 ## api2.blog.braincleaner.site => 프로젝트 API 서버 도메인
 frontend http_front
     bind *:80
-    acl host_app1 hdr_beg(host) -i api2.blog.monimoni.site
+    acl host_app1 hdr_beg(host) -i api2.blog.braincleaner.site
 
     use_backend http_back_1 if host_app1
 
